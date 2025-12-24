@@ -35,6 +35,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> getMe(
             @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        log.info("Get me request received. userId: {}", userPrincipal.getId());
         UserResponse userResponse = userService.getMe(userPrincipal);
         return ApiResponse.build(HttpStatus.OK, userResponse);
     }
@@ -43,14 +44,16 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserBookResponse>> getBookById(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("id") Long bookId) {
+        log.info("Get book by id request received. bookId: {}", bookId);
         UserBookResponse userBookResponse = userService.getMyLibraryBookById(userPrincipal, bookId);
         return ApiResponse.build(HttpStatus.OK, userBookResponse);
     }
 
     @GetMapping("/me/books/search")
-    public ResponseEntity<ApiResponse<Page<UserBookResponse>>> getBookBySearch(
+    public ResponseEntity<ApiResponse<Page<UserBookResponse>>> searchMyBooks(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @ModelAttribute BookSearchRequest bookSearchRequest) {
+        log.info("Search books request received. bookSearchRequest: {}", bookSearchRequest);
         Page<UserBookResponse> userBookResponsePage = userService.searchMyLibraryBooks(userPrincipal, bookSearchRequest);
         return ApiResponse.build(HttpStatus.OK, userBookResponsePage);
     }
@@ -59,6 +62,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> addBookToLibrary(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody AddBookRequest addBookRequest) {
+        log.info("Add book to library request received. addBookRequest: {}", addBookRequest);
         userService.addBookToMyLibrary(userPrincipal, addBookRequest);
         return ApiResponse.build(HttpStatus.CREATED, "Book added to library");
     }
@@ -67,6 +71,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<Void>> removeBookFromLibrary(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("userBookId") Long userBookId) {
+        log.info("Remove book from library request received. userBookId: {}", userBookId);
         userService.removeBookFromMyLibrary(userPrincipal, userBookId);
         return ApiResponse.build(HttpStatus.NO_CONTENT, "Book removed from library");
     }
@@ -76,6 +81,7 @@ public class UserController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("userBookId") Long userBookId,
             @RequestBody UpdateBookStatusRequest updateBookStatusRequest) {
+        log.info("Update book status request received. userBookId: {}", userBookId);
         userService.updateMyLibraryBookStatus(userPrincipal, userBookId, updateBookStatusRequest);
         return ApiResponse.build(HttpStatus.OK, "Book status updated");
     }

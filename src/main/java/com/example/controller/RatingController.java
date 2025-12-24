@@ -30,6 +30,7 @@ public class RatingController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("bookId") Long bookId,
             @RequestBody RatingRequest ratingRequest) {
+        log.info("Add or update request received. bookId: {} ratingRequest: {}", bookId, ratingRequest);
         RatingResponse response = ratingService.addOrUpdateRating(userPrincipal, bookId, ratingRequest);
         return ApiResponse.build(HttpStatus.OK, "Rating created or updated", response);
     }
@@ -38,6 +39,7 @@ public class RatingController {
     public ResponseEntity<ApiResponse<Void>> deleteRating(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("bookId") Long bookId) {
+        log.info("Delete rating request received. bookId: {}", bookId);
         ratingService.deleteRating(userPrincipal, bookId);
         return ApiResponse.build(HttpStatus.NO_CONTENT, "Rating removed");
     }

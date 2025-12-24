@@ -24,16 +24,16 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<Void>> registerUser(
-            @RequestBody RegisterUserRequest registerUserRequest
-    ) {
+            @RequestBody RegisterUserRequest registerUserRequest) {
+        log.info("Register request received for email: {}", registerUserRequest.getEmail());
         authService.registerUser(registerUserRequest);
         return ApiResponse.build(HttpStatus.CREATED, "User created");
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginUserResponse>> loginUser(
-            @RequestBody LoginUserRequest loginUserRequest
-    ) {
+            @RequestBody LoginUserRequest loginUserRequest) {
+        log.info("Register request received for email: {} username: {}", loginUserRequest.getEmail(), loginUserRequest.getUsername());
         LoginUserResponse loginUserResponse = authService.loginUser(loginUserRequest);
         return ApiResponse.build(HttpStatus.OK, "Login successful", loginUserResponse);
     }

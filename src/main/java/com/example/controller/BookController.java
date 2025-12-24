@@ -26,16 +26,16 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<BookResponse>> getBookById(
-            @PathVariable("id") Long id
-    ) {
+            @PathVariable("id") Long id) {
+        log.info("Get book by id request received. bookId: {}", id);
         BookResponse bookResponse = bookService.getBooksById(id);
         return ApiResponse.build(HttpStatus.OK, bookResponse);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> getBooksBySearch(
-            @ModelAttribute BookSearchRequest bookSearchRequest
-    ) {
+    public ResponseEntity<ApiResponse<List<BookResponse>>> searchBooks(
+            @ModelAttribute BookSearchRequest bookSearchRequest) {
+        log.info("Get books request received. bookSearchRequest: {}", bookSearchRequest);
         List<BookResponse> bookResponseList = bookService.searchBooks(bookSearchRequest);
         return ApiResponse.build(HttpStatus.OK, bookResponseList);
     }
