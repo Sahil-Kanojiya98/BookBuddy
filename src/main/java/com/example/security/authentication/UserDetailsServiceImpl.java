@@ -23,6 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("Authentication attempt for username: {}", username);
         Optional<UserPrincipalDto> optionalUserPrincipalDto = userRepository.findUserPrincipalByUsername(username);
 
         UserPrincipalDto userPrincipalDto = optionalUserPrincipalDto.orElseThrow(() ->

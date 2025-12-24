@@ -24,7 +24,7 @@ public class JwtTokenService {
     private final String EMAIL_CLAIM = "email";
     private final String AUTHORITIES_CLAIM = "authorities";
 
-    public JwtTokenService(JwtTokenConfigProperties jwtTokenConfigProperties){
+    public JwtTokenService(JwtTokenConfigProperties jwtTokenConfigProperties) {
         key = Keys.hmacShaKeyFor(jwtTokenConfigProperties.getSecret().getBytes());
         EXPIRATION_MS = jwtTokenConfigProperties.getExpirationMs();
     }
@@ -32,6 +32,8 @@ public class JwtTokenService {
     public String generateToken(Long userId, String username, String email, List<String> authorities) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_MS);
+
+        log.debug("Generating JWT token. userId: {} username: {} authorities: {}", userId, username, authorities);
 
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
@@ -46,6 +48,7 @@ public class JwtTokenService {
 
     public JwtPayload verify(String token) {
         try {
+            log.debug("Verifying JWT token");
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
