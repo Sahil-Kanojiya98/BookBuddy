@@ -1,0 +1,21 @@
+package com.example.dto.response;
+
+import com.example.model.constant.ReadingStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.Instant;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserBookResponse {
+
+    private Long id;
+    private BookResponse book;
+    private ReadingStatus status;
+    private Instant addedAt;
+}

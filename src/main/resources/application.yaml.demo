@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: BookBuddyApp
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/BookBuddyAppDB?createDatabaseIfNotExist=true
+    username: "ChangeIt"
+    password: "ChangeIt"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # HikariCP settings
+    hikari:
+      maximum-pool-size: 10    # max connections
+      minimum-idle: 2          # min connections idle
+      idle-timeout: 30000      # wait before closing - 30 seconds
+      max-lifetime: 1800000    # max connection lifetime - 30 minutes
+      connection-timeout: 30000   # max time will wait for a connection - 30 seconds
+      pool-name: MyHikariCP    # pool name
+      validation-timeout: 5000    # max time to wait for a connection validation query - is alive query
+      leak-detection-threshold: 2000   # if connection borrowed and not returned then logs a warning in time
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/data.sql
+
+  security:
+    jwt-token:
+      secret: "ChangeIt"
+      expiration-ms: 86400000 # 24 hours
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.example: TRACE
