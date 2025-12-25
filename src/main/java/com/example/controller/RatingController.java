@@ -5,6 +5,7 @@ import com.example.dto.response.ApiResponse;
 import com.example.dto.response.RatingResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.RatingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class RatingController {
     public ResponseEntity<ApiResponse<RatingResponse>> addOrUpdateRating(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("bookId") Long bookId,
-            @RequestBody RatingRequest ratingRequest) {
+            @Valid @RequestBody RatingRequest ratingRequest) {
         log.info("Add or update request received. bookId: {} ratingRequest: {}", bookId, ratingRequest);
         RatingResponse response = ratingService.addOrUpdateRating(userPrincipal, bookId, ratingRequest);
         return ApiResponse.build(HttpStatus.OK, "Rating created or updated", response);

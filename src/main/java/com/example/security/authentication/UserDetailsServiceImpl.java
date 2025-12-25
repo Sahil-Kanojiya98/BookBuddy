@@ -8,14 +8,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -34,6 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userPrincipalDto.getId(),
                 userPrincipalDto.getUsername(),
                 userPrincipalDto.getEmail(),
+                userPrincipalDto.getPasswordHash(),
                 List.of(new SimpleGrantedAuthority(DEFAULT_USER_ROLE))
         );
     }

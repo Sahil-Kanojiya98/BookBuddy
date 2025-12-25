@@ -4,8 +4,11 @@ import com.example.dto.request.BookSearchRequest;
 import com.example.dto.response.ApiResponse;
 import com.example.dto.response.BookResponse;
 import com.example.service.BookService;
+import com.example.validation.ValidatorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +36,10 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<BookResponse>>> searchBooks(
-            @ModelAttribute BookSearchRequest bookSearchRequest) {
+    public ResponseEntity<ApiResponse<Page<BookResponse>>> searchBooks(
+            @Valid @ModelAttribute BookSearchRequest bookSearchRequest) {
         log.info("Get books request received. bookSearchRequest: {}", bookSearchRequest);
-        List<BookResponse> bookResponseList = bookService.searchBooks(bookSearchRequest);
+        Page<BookResponse> bookResponseList = bookService.searchBooks(bookSearchRequest);
         return ApiResponse.build(HttpStatus.OK, bookResponseList);
     }
 }

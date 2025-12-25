@@ -3,9 +3,11 @@ package com.example.controller;
 import com.example.dto.request.ReviewRequest;
 import com.example.dto.request.ReviewSearchRequest;
 import com.example.dto.response.ApiResponse;
+import com.example.dto.response.MyReviewResponse;
 import com.example.dto.response.ReviewResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,8 +33,8 @@ public class ReviewController {
 
     @PostMapping("/books/{bookId}/review")
     public ResponseEntity<ApiResponse<Void>> addOrUpdateReview(
-            @PathVariable("bookId") Long bookId,
             @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("bookId") Long bookId,
             @RequestBody ReviewRequest reviewRequest) {
         log.info("Add or update request received. bookId: {}", bookId);
         reviewService.addOrUpdateReview(userPrincipal, bookId, reviewRequest);
@@ -41,27 +43,25 @@ public class ReviewController {
 
     @DeleteMapping("/books/{bookId}/review")
     public ResponseEntity<ApiResponse<Void>> deleteReview(
-            @PathVariable("bookId") Long bookId,
-            @AuthenticationPrincipal UserPrincipal userPrincipal) {
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("bookId") Long bookId) {
         log.info("Delete review request received. bookId: {}", bookId);
         reviewService.deleteReview(userPrincipal, bookId);
         return ApiResponse.build(HttpStatus.NO_CONTENT, "Review removed");
     }
 
     @GetMapping("/users/me/reviews")
-    public ResponseEntity<ApiResponse<Page<ReviewResponse>>> getMyReviews(
+    public ResponseEntity<ApiResponse<Page<MyReviewResponse>>> getMyReviews(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @ModelAttribute ReviewSearchRequest reviewSearchRequest
-    ) {
+            @Valid @ModelAttribute ReviewSearchRequest reviewSearchRequest) {
         log.info("Get my reviews request received. reviewSearchRequest: {}", reviewSearchRequest);
-        Page<ReviewResponse> reviewResponsePage = reviewService.searchMyReviews(userPrincipal, reviewSearchRequest);
+        Page<MyReviewResponse> reviewResponsePage = reviewService.searchMyReviews(userPrincipal, reviewSearchRequest);
         return ApiResponse.build(HttpStatus.OK, reviewResponsePage);
     }
 
     @GetMapping("/reviews/search")
     public ResponseEntity<ApiResponse<Page<ReviewResponse>>> searchReviews(
-            @ModelAttribute ReviewSearchRequest reviewSearchRequest
-    ) {
+            @Valid @ModelAttribute ReviewSearchRequest reviewSearchRequest) {
         log.info("Search reviews request received. reviewSearchRequest: {}", reviewSearchRequest);
         Page<ReviewResponse> reviews = reviewService.searchReviews(reviewSearchRequest);
         return ApiResponse.build(HttpStatus.OK, reviews);

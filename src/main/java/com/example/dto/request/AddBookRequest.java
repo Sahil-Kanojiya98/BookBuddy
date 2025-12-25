@@ -17,5 +17,5 @@ public class AddBookRequest {
     private Long bookId;
 
     @NotNull
-    private ReadingStatus status;
+    private ReadingStatus status = ReadingStatus.TO_READ;
 }

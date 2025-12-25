@@ -2,25 +2,47 @@ package com.example.service;
 
 import com.example.dto.request.BookSearchRequest;
 import com.example.dto.response.BookResponse;
+import com.example.exception.BookNotFoundException;
+import com.example.repository.BookRepository;
+import com.example.validation.ValidatorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class BookService {
 
+    private final ValidatorService validatorService;
+    private final BookRepository bookRepository;
+
     @Transactional(readOnly = true)
     public BookResponse getBooksById(Long id) {
-        return null;
+        validatorService.validatePositiveBookId(id);
+        Optional<BookResponse> optionalBookResponse = bookRepository.findBookResponseById(id);
+        if (optionalBookResponse.isEmpty()){
+            throw new BookNotFoundException(String.format("Book not found. id: %d", id));
+        }
+        return optionalBookResponse.get();
     }
 
     @Transactional(readOnly = true)
-    public List<BookResponse> searchBooks(BookSearchRequest bookSearchRequest) {
-        return List.of();
+    public Page<BookResponse> searchBooks(BookSearchRequest bookSearchRequest) {
+        String title = bookSearchRequest.getTitle() != null ? bookSearchRequest.getTitle().trim().toLowerCase() : null;
+        String author = bookSearchRequest.getAuthor() != null ? bookSearchRequest.getAuthor().trim().toLowerCase() : null;
+
+        Sort sort = Sort.by(Sort.Order.by(bookSearchRequest.getSortBy()).with(Sort.Direction.fromString(bookSearchRequest.getSortOrder())));
+        PageRequest pageRequest = PageRequest.of(bookSearchRequest.getPage(), bookSearchRequest.getSize(), sort);
+
+        return bookRepository.searchBooks(
+                title, author, bookSearchRequest.getMinRating(), bookSearchRequest.getPublishedYearFrom(), pageRequest
+        );
     }
 }

@@ -12,7 +12,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewResponse {
+public class MyReviewResponse {
 
     private Long id;
     private Long bookId;
@@ -33,6 +33,4 @@ public class ReviewResponse {
     private Instant updatedAt;
 
     private String bookTitle;
-
-    private String username;
 }

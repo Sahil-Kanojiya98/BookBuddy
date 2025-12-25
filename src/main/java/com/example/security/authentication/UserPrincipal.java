@@ -16,12 +16,23 @@ public class UserPrincipal implements UserDetails {
     @Getter
     private final String email;
 
+    private final String passwordHash;
+
     private final Collection<? extends GrantedAuthority> authorities;
+
+    public UserPrincipal(Long id, String username, String email, String passwordHash, Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.authorities = authorities;
+    }
 
     public UserPrincipal(Long id, String username, String email, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.passwordHash = null;
         this.authorities = authorities;
     }
 
@@ -32,7 +43,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return passwordHash;
     }
 
     @Override

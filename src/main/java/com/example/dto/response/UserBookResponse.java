@@ -1,6 +1,7 @@
 package com.example.dto.response;
 
 import com.example.model.constant.ReadingStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,11 @@ public class UserBookResponse {
     private Long id;
     private BookResponse book;
     private ReadingStatus status;
+
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            timezone = "UTC"
+    )
     private Instant addedAt;
 }
