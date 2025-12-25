@@ -14,10 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BookSearchRequest {
 
-    @NotEmpty(message = "Title cannot be empty")
     private String title;
 
-    @NotEmpty(message = "Author cannot be empty")
     private String author;
 
     @Min(value = 1, message = "Minimum rating should be at least 1")

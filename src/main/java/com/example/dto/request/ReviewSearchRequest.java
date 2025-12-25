@@ -17,13 +17,10 @@ public class ReviewSearchRequest {
     @Positive(message = "Book ID must be a positive number")
     private Long bookId;
 
-    @NotEmpty(message = "Title cannot be blank if provided")
     private String title;
 
-    @NotEmpty(message = "Author cannot be blank if provided")
     private String author;
 
-    @NotEmpty(message = "Keyword cannot be blank if provided")
     private String keyword;
 
     @Pattern(regexp = "title|author|createdAt", message = "Invalid sort field. Choose from: title, author, createdAt")

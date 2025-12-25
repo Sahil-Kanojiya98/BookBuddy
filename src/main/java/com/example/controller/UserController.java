@@ -8,6 +8,7 @@ import com.example.dto.response.UserBookResponse;
 import com.example.dto.response.UserResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,7 +53,7 @@ public class UserController {
     @GetMapping("/me/books/search")
     public ResponseEntity<ApiResponse<Page<UserBookResponse>>> searchMyBooks(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @ModelAttribute BookSearchRequest bookSearchRequest) {
+            @Valid @ModelAttribute BookSearchRequest bookSearchRequest) {
         log.info("Search books request received. bookSearchRequest: {}", bookSearchRequest);
         Page<UserBookResponse> userBookResponsePage = userService.searchMyLibraryBooks(userPrincipal, bookSearchRequest);
         return ApiResponse.build(HttpStatus.OK, userBookResponsePage);

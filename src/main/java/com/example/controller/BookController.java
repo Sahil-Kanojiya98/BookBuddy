@@ -4,7 +4,6 @@ import com.example.dto.request.BookSearchRequest;
 import com.example.dto.response.ApiResponse;
 import com.example.dto.response.BookResponse;
 import com.example.service.BookService;
-import com.example.validation.ValidatorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
