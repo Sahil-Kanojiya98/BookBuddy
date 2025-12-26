@@ -105,11 +105,11 @@ public class GlobalExceptionHandler {
 		return ErrorResponse.build(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", ex.getMessage());
 	}
 
-    @ExceptionHandler(RateLimitExceededException.class)
-    public ResponseEntity<ErrorResponse> handleRateLimitExceededException(RateLimitExceededException ex) {
-        log.error("RateLimitExceededException: {}", ex.getMessage(), ex);
-        return ErrorResponse.build(HttpStatus.TOO_MANY_REQUESTS, "RATE_LIMIT_EXCEEDED", ex.getMessage());
-    }
+	@ExceptionHandler(RateLimitExceededException.class)
+	public ResponseEntity<ErrorResponse> handleRateLimitExceededException(RateLimitExceededException ex) {
+		log.error("RateLimitExceededException: {}", ex.getMessage(), ex);
+		return ErrorResponse.build(HttpStatus.TOO_MANY_REQUESTS, "RATE_LIMIT_EXCEEDED", ex.getMessage());
+	}
 
 	@ExceptionHandler(InvalidJwtTokenException.class)
 	public ResponseEntity<ErrorResponse> handleInvalidJwtTokenException(InvalidJwtTokenException ex) {

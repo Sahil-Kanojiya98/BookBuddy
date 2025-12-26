@@ -40,9 +40,9 @@ spring:
 
   cache:
     type: caffeine
-    cache-names: books, booksSearch
     caffeine:
       spec: maximumSize=10_000,expireAfterWrite=10m
+    cache-names: books, booksSearch, rateLimitCache
 
 server:
   port: 8080
