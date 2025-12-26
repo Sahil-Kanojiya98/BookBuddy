@@ -14,25 +14,17 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ReviewResponse {
 
-    private Long id;
-    private Long bookId;
-    private String content;
+	private Long id;
+	private Long bookId;
+	private String content;
 
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            timezone = "UTC"
-    )
-    private Instant createdAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	private Instant createdAt;
 
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            timezone = "UTC"
-    )
-    private Instant updatedAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	private Instant updatedAt;
 
-    private String bookTitle;
+	private String bookTitle;
 
-    private String username;
+	private String username;
 }

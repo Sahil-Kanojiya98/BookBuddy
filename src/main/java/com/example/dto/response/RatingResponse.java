@@ -11,9 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RatingResponse {
 
-    private Long bookId;
-    private Integer value;
-    private Double averageRating;
-    private Integer ratingCount;
+	private Long bookId;
+	private Integer value;
+	private Double averageRating;
+	private Integer ratingCount;
 }
-

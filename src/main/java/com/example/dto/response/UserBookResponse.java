@@ -15,14 +15,10 @@ import java.time.Instant;
 @AllArgsConstructor
 public class UserBookResponse {
 
-    private Long id;
-    private BookResponse book;
-    private ReadingStatus status;
+	private Long id;
+	private BookResponse book;
+	private ReadingStatus status;
 
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-            timezone = "UTC"
-    )
-    private Instant addedAt;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+	private Instant addedAt;
 }

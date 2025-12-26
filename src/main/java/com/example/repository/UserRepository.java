@@ -12,19 +12,23 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("SELECT new com.example.dto.UserPrincipalDto(u.id, u.username, u.email, u.passwordHash) " +
-            "FROM User u " +
-            "WHERE u.username = :username")
-    Optional<UserPrincipalDto> findUserPrincipalByUsername(@Param("username") String username);
+	@Query("""
+			SELECT new com.example.dto.UserPrincipalDto(u.id, u.username, u.email, u.passwordHash)
+			FROM User u
+			WHERE u.username = :username
+			""")
+	Optional<UserPrincipalDto> findUserPrincipalByUsername(@Param("username") String username);
 
-    boolean existsByEmail(String email);
+	boolean existsByEmail(String email);
 
-    boolean existsByUsername(String username);
+	boolean existsByUsername(String username);
 
-    @Query("SELECT u.username " +
-            "FROM User u " +
-            "WHERE u.email = :email")
-    Optional<String> findUsernameByEmail(@Param("email") String email);
+	@Query("""
+			SELECT u.username
+			FROM User u
+			WHERE u.email = :email
+			""")
+	Optional<String> findUsernameByEmail(@Param("email") String email);
 
-    Optional<User> findByUsername(String username);
+	Optional<User> findByUsername(String username);
 }

@@ -24,24 +24,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/books")
 public class RatingController {
 
-    private final RatingService ratingService;
+	private final RatingService ratingService;
 
-    @PostMapping("/{bookId}/rating")
-    public ResponseEntity<ApiResponse<RatingResponse>> addOrUpdateRating(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("bookId") Long bookId,
-            @Valid @RequestBody RatingRequest ratingRequest) {
-        log.info("Add or update request received. bookId: {} ratingRequest: {}", bookId, ratingRequest);
-        RatingResponse response = ratingService.addOrUpdateRating(userPrincipal, bookId, ratingRequest);
-        return ApiResponse.build(HttpStatus.OK, "Rating created or updated", response);
-    }
+	@PostMapping("/{bookId}/rating")
+	public ResponseEntity<ApiResponse<RatingResponse>> addOrUpdateRating(
+			@AuthenticationPrincipal UserPrincipal userPrincipal,
+			@PathVariable("bookId") Long bookId,
+			@Valid @RequestBody RatingRequest ratingRequest) {
+		log.info("Add or update request received. bookId: {} ratingRequest: {}", bookId, ratingRequest);
+		RatingResponse response = ratingService.addOrUpdateRating(userPrincipal, bookId, ratingRequest);
+		return ApiResponse.build(HttpStatus.OK, "Rating created or updated", response);
+	}
 
-    @DeleteMapping("/{bookId}/rating")
-    public ResponseEntity<ApiResponse<Void>> deleteRating(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable("bookId") Long bookId) {
-        log.info("Delete rating request received. bookId: {}", bookId);
-        ratingService.deleteRating(userPrincipal, bookId);
-        return ApiResponse.build(HttpStatus.NO_CONTENT, "Rating removed");
-    }
+	@DeleteMapping("/{bookId}/rating")
+	public ResponseEntity<ApiResponse<Void>> deleteRating(
+			@AuthenticationPrincipal UserPrincipal userPrincipal,
+			@PathVariable("bookId") Long bookId) {
+		log.info("Delete rating request received. bookId: {}", bookId);
+		ratingService.deleteRating(userPrincipal, bookId);
+		return ApiResponse.build(HttpStatus.NO_CONTENT, "Rating removed");
+	}
 }

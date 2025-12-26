@@ -21,21 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
-    private final AuthService authService;
+	private final AuthService authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Void>> registerUser(
-            @Valid @RequestBody RegisterUserRequest registerUserRequest) {
-        log.info("Register request received for email: {}", registerUserRequest.getEmail());
-        authService.registerUser(registerUserRequest);
-        return ApiResponse.build(HttpStatus.CREATED, "User created");
-    }
+	@PostMapping("/register")
+	public ResponseEntity<ApiResponse<Void>> registerUser(
+			@Valid @RequestBody RegisterUserRequest registerUserRequest) {
+		log.info("Register request received for email: {}", registerUserRequest.getEmail());
+		authService.registerUser(registerUserRequest);
+		return ApiResponse.build(HttpStatus.CREATED, "User created");
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginUserResponse>> loginUser(
-            @Valid @RequestBody LoginUserRequest loginUserRequest) {
-        log.info("Register request received for email: {} username: {}", loginUserRequest.getEmail(), loginUserRequest.getUsername());
-        LoginUserResponse loginUserResponse = authService.loginUser(loginUserRequest);
-        return ApiResponse.build(HttpStatus.OK, "Login successful", loginUserResponse);
-    }
+	@PostMapping("/login")
+	public ResponseEntity<ApiResponse<LoginUserResponse>> loginUser(
+			@Valid @RequestBody LoginUserRequest loginUserRequest) {
+		log.info("Register request received for email: {} username: {}", loginUserRequest.getEmail(),
+				loginUserRequest.getUsername());
+		LoginUserResponse loginUserResponse = authService.loginUser(loginUserRequest);
+		return ApiResponse.build(HttpStatus.OK, "Login successful", loginUserResponse);
+	}
 }

@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.request.AddBookRequest;
 import com.example.dto.request.BookSearchRequest;
 import com.example.dto.request.UpdateBookStatusRequest;
+import com.example.dto.response.PaginatedResponse;
 import com.example.dto.response.UserBookResponse;
 import com.example.dto.response.UserResponse;
 import com.example.exception.BookNotFoundException;
@@ -31,82 +32,100 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserBookRepository userBookRepository;
-    private final UserRepository userRepository;
-    private final BookRepository bookRepository;
+	private final UserBookRepository userBookRepository;
+	private final UserRepository userRepository;
+	private final BookRepository bookRepository;
 
-    public UserResponse getMe(UserPrincipal userPrincipal) {
-        return new UserResponse(
-                userPrincipal.getId(),
-                userPrincipal.getEmail(),
-                userPrincipal.getUsername()
-        );
-    }
+	public UserResponse getMe(UserPrincipal userPrincipal) {
+		return new UserResponse(
+				userPrincipal.getId(),
+				userPrincipal.getEmail(),
+				userPrincipal.getUsername());
+	}
 
-    @Transactional(readOnly = true)
-    public UserBookResponse getMyLibraryBookById(UserPrincipal userPrincipal, Long bookId) {
-        Long userId = userPrincipal.getId();
-        Optional<UserBookResponse> optionalUserBookResponse = userBookRepository.findUserBookResponseByUserIdAndBookId(userId, bookId);
-        if (optionalUserBookResponse.isEmpty()) {
-            throw new UserBookNotFoundException(String.format("UserBook not found with userId %d bookId %d", userId, bookId));
-        }
-        return optionalUserBookResponse.get();
-    }
+	@Transactional(readOnly = true)
+	public UserBookResponse getMyLibraryBookById(UserPrincipal userPrincipal, Long bookId) {
+		Long userId = userPrincipal.getId();
+		Optional<UserBookResponse> optionalUserBookResponse = userBookRepository
+				.findUserBookResponseByUserIdAndBookId(userId, bookId);
+		if (optionalUserBookResponse.isEmpty()) {
+			throw new UserBookNotFoundException(
+					String.format("UserBook not found with userId %d bookId %d", userId, bookId));
+		}
+		return optionalUserBookResponse.get();
+	}
 
-    @Transactional(readOnly = true)
-    public Page<UserBookResponse> searchMyLibraryBooks(UserPrincipal userPrincipal, BookSearchRequest bookSearchRequest) {
-        Long userId = userPrincipal.getId();
-        String title = bookSearchRequest.getTitle() != null ? bookSearchRequest.getTitle().trim().toLowerCase() : null;
-        String author = bookSearchRequest.getAuthor() != null ? bookSearchRequest.getAuthor().trim().toLowerCase() : null;
+	@Transactional(readOnly = true)
+	public PaginatedResponse<UserBookResponse> searchMyLibraryBooks(UserPrincipal userPrincipal,
+			BookSearchRequest bookSearchRequest) {
+		Long userId = userPrincipal.getId();
+		String title = bookSearchRequest.getTitle() != null ? bookSearchRequest.getTitle().trim().toLowerCase() : null;
+		String author = bookSearchRequest.getAuthor() != null ? bookSearchRequest.getAuthor().trim().toLowerCase()
+				: null;
 
-        Sort sort = Sort.by(Sort.Order.by(bookSearchRequest.getSortBy()).with(Sort.Direction.fromString(bookSearchRequest.getSortOrder())));
-        PageRequest pageRequest = PageRequest.of(bookSearchRequest.getPage(), bookSearchRequest.getSize(), sort);
+		String sortBy = bookSearchRequest.getSortBy();
 
-        return userBookRepository.searchMyLibraryBooks(
-                userId, title, author, bookSearchRequest.getMinRating(), bookSearchRequest.getPublishedYearFrom(), pageRequest
-        );
-    }
+		String sortField = switch (sortBy) {
+			case "title" -> "b.title";
+			case "author" -> "b.author";
+			case "rating" -> "b.averageRating";
+			case "publishedYear" -> "b.publishedYear";
+			default -> "id";
+		};
 
-    @Transactional
-    public void addBookToMyLibrary(UserPrincipal userPrincipal, AddBookRequest addBookRequest) {
-        Long userId = userPrincipal.getId();
-        Long bookId = addBookRequest.getBookId();
+		Sort sort = Sort.by(Sort.Order.by(sortField)
+				.with(Sort.Direction.fromString(bookSearchRequest.getSortOrder())));
+		PageRequest pageRequest = PageRequest.of(Math.max(bookSearchRequest.getPage() - 1, 0),
+				bookSearchRequest.getSize(), sort);
 
-        if (userBookRepository.findByUserIdAndBookId(userId, bookId).isPresent()) {
-            throw new UserBookAlreadyExistsException(String.format("Book with id %d is already in user's library", bookId));
-        }
+		Page<UserBookResponse> userBookResponsePage = userBookRepository.searchMyLibraryBooks(
+				userId, title, author, bookSearchRequest.getMinRating(), bookSearchRequest.getPublishedYearFrom(),
+				pageRequest);
+		return PaginatedResponse.build(userBookResponsePage);
+	}
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(String.format("User not found with id %d", userId)));
+	@Transactional
+	public void addBookToMyLibrary(UserPrincipal userPrincipal, AddBookRequest addBookRequest) {
+		Long userId = userPrincipal.getId();
+		Long bookId = addBookRequest.getBookId();
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException(String.format("Book not found with id %d", bookId)));
+		if (userBookRepository.findByUserIdAndBookId(userId, bookId).isPresent()) {
+			throw new UserBookAlreadyExistsException(
+					String.format("Book with id %d is already in user's library", bookId));
+		}
 
-        UserBook userBook = new UserBook();
-        userBook.setUser(user);
-        userBook.setBook(book);
-        userBook.setStatus(addBookRequest.getStatus());
-        userBookRepository.save(userBook);
-    }
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new UserNotFoundException(String.format("User not found with id %d", userId)));
 
-    @Transactional
-    public void removeBookFromMyLibrary(UserPrincipal userPrincipal, Long bookId) {
-        Long userId = userPrincipal.getId();
+		Book book = bookRepository.findById(bookId)
+				.orElseThrow(() -> new BookNotFoundException(String.format("Book not found with id %d", bookId)));
 
-        Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userId, bookId);
+		UserBook userBook = new UserBook();
+		userBook.setUser(user);
+		userBook.setBook(book);
+		userBook.setStatus(addBookRequest.getStatus());
+		userBookRepository.save(userBook);
+	}
 
-        optionalUserBook.ifPresent(userBookRepository::delete);
-    }
+	@Transactional
+	public void removeBookFromMyLibrary(UserPrincipal userPrincipal, Long bookId) {
+		Long userId = userPrincipal.getId();
 
-    @Transactional
-    public void updateMyLibraryBookStatus(UserPrincipal userPrincipal, Long bookId, UpdateBookStatusRequest updateBookStatusRequest) {
-        Long userId = userPrincipal.getId();
+		Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userId, bookId);
 
-        Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userId, bookId);
+		optionalUserBook.ifPresent(userBookRepository::delete);
+	}
 
-        optionalUserBook.ifPresent(userBook -> {
-            userBook.setStatus(updateBookStatusRequest.getStatus());
-            userBookRepository.save(userBook);
-        });
-    }
+	@Transactional
+	public void updateMyLibraryBookStatus(UserPrincipal userPrincipal, Long bookId,
+			UpdateBookStatusRequest updateBookStatusRequest) {
+		Long userId = userPrincipal.getId();
+
+		Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userId, bookId);
+
+		optionalUserBook.ifPresent(userBook -> {
+			userBook.setStatus(updateBookStatusRequest.getStatus());
+			userBookRepository.save(userBook);
+		});
+	}
 }

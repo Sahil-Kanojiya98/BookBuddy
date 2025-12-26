@@ -17,55 +17,55 @@ import java.util.List;
 @Component
 public class JwtTokenService {
 
-    private final Key key;
-    private final long EXPIRATION_MS;
+	private final Key key;
+	private final long EXPIRATION_MS;
 
-    private final String USERNAME_CLAIM = "username";
-    private final String EMAIL_CLAIM = "email";
-    private final String AUTHORITIES_CLAIM = "authorities";
+	private final String USERNAME_CLAIM = "username";
+	private final String EMAIL_CLAIM = "email";
+	private final String AUTHORITIES_CLAIM = "authorities";
 
-    public JwtTokenService(JwtTokenConfigProperties jwtTokenConfigProperties) {
-        key = Keys.hmacShaKeyFor(jwtTokenConfigProperties.getSecret().getBytes());
-        EXPIRATION_MS = jwtTokenConfigProperties.getExpirationMs();
-    }
+	public JwtTokenService(JwtTokenConfigProperties jwtTokenConfigProperties) {
+		key = Keys.hmacShaKeyFor(jwtTokenConfigProperties.getSecret().getBytes());
+		EXPIRATION_MS = jwtTokenConfigProperties.getExpirationMs();
+	}
 
-    public String generateToken(Long userId, String username, String email, List<String> authorities) {
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + EXPIRATION_MS);
+	public String generateToken(Long userId, String username, String email, List<String> authorities) {
+		Date now = new Date();
+		Date expiryDate = new Date(now.getTime() + EXPIRATION_MS);
 
-        log.debug("Generating JWT token. userId: {} username: {} authorities: {}", userId, username, authorities);
+		log.debug("Generating JWT token. userId: {} username: {} authorities: {}", userId, username, authorities);
 
-        return Jwts.builder()
-                .setSubject(String.valueOf(userId))
-                .claim(USERNAME_CLAIM, username)
-                .claim(EMAIL_CLAIM, email)
-                .claim(AUTHORITIES_CLAIM, authorities)
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
+		return Jwts.builder()
+				.setSubject(String.valueOf(userId))
+				.claim(USERNAME_CLAIM, username)
+				.claim(EMAIL_CLAIM, email)
+				.claim(AUTHORITIES_CLAIM, authorities)
+				.setIssuedAt(now)
+				.setExpiration(expiryDate)
+				.signWith(key, SignatureAlgorithm.HS256)
+				.compact();
+	}
 
-    public JwtPayload verify(String token) {
-        try {
-            log.debug("Verifying JWT token");
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+	public JwtPayload verify(String token) {
+		try {
+			log.debug("Verifying JWT token");
+			Claims claims = Jwts.parserBuilder()
+					.setSigningKey(key)
+					.build()
+					.parseClaimsJws(token)
+					.getBody();
 
-            Long userId = Long.valueOf(claims.getSubject());
-            String username = claims.get(USERNAME_CLAIM, String.class);
-            String email = claims.get(EMAIL_CLAIM, String.class);
+			Long userId = Long.valueOf(claims.getSubject());
+			String username = claims.get(USERNAME_CLAIM, String.class);
+			String email = claims.get(EMAIL_CLAIM, String.class);
 
-            @SuppressWarnings("unchecked")
-            List<String> authorities = (List<String>) claims.get(AUTHORITIES_CLAIM);
+			@SuppressWarnings("unchecked")
+			List<String> authorities = (List<String>) claims.get(AUTHORITIES_CLAIM);
 
-            return new JwtPayload(userId, username, email, authorities);
+			return new JwtPayload(userId, username, email, authorities);
 
-        } catch (Exception e) {
-            throw new InvalidJwtTokenException("Invalid JWT token", e);
-        }
-    }
+		} catch (Exception e) {
+			throw new InvalidJwtTokenException("Invalid JWT token", e);
+		}
+	}
 }

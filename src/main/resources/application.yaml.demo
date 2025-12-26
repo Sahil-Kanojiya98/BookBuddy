@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/BookBuddyAppDB?createDatabaseIfNotExist=true
-    username: "ChangeIt"
-    password: "ChangeIt"
+    username: "changeIt"
+    password: "changeIt"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     # HikariCP settings
@@ -35,8 +35,14 @@ spring:
 
   security:
     jwt-token:
-      secret: "ChangeIt"
+      secret: "changeIt"
       expiration-ms: 86400000 # 24 hours
+
+  cache:
+    type: caffeine
+    cache-names: books, booksSearch
+    caffeine:
+      spec: maximumSize=10_000,expireAfterWrite=10m
 
 server:
   port: 8080

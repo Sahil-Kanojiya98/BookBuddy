@@ -14,16 +14,29 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT new com.example.dto.response.BookResponse(b.id, b.title, b.author, b.isbn, b.description, b.publishedYear, b.averageRating, b.ratingCount) " +
-            "FROM Book b " +
-            "WHERE b.id = :id")
-    Optional<BookResponse> findBookResponseById(@Param("id") Long id);
+	@Query("""
+			    SELECT new com.example.dto.response.BookResponse(
+			        b.id, b.title, b.author, b.isbn, b.description,
+			         b.publishedYear, b.averageRating, b.ratingCount
+			    )
+			    FROM Book b
+			    WHERE b.id = :id
+			""")
+	Optional<BookResponse> findBookResponseById(@Param("id") Long id);
 
-    @Query("SELECT new com.example.dto.response.BookResponse(b.id, b.title, b.author, b.isbn, b.description, b.publishedYear, b.averageRating, b.ratingCount) " +
-            "FROM Book b " +
-            "WHERE (:title IS NULL OR b.title LIKE %:title%) " +
-            "AND (:author IS NULL OR b.author LIKE %:author%) " +
-            "AND (:minRating IS NULL OR b.averageRating >= :minRating) " +
-            "AND (:publishedYearFrom IS NULL OR b.publishedYear >= :publishedYearFrom)")
-    Page<BookResponse> searchBooks(String title, String author, Integer minRating, Integer publishedYearFrom, PageRequest pageRequest);
+	@Query("""
+			    SELECT new com.example.dto.response.BookResponse(
+			        b.id, b.title, b.author, b.isbn, b.description,
+			         b.publishedYear, b.averageRating, b.ratingCount
+			    )
+			    FROM Book b
+			    WHERE (:title IS NULL OR b.title LIKE %:title%)
+			    AND (:author IS NULL OR b.author LIKE %:author%)
+			    AND (:minRating IS NULL OR b.averageRating >= :minRating)
+			    AND (:publishedYearFrom IS NULL OR b.publishedYear >= :publishedYearFrom)
+			""")
+	Page<BookResponse> searchBooks(
+			@Param("title") String title, @Param("author") String author, @Param("minRating") Integer minRating,
+			@Param("publishedYearFrom") Integer publishedYearFrom,
+			PageRequest pageRequest);
 }

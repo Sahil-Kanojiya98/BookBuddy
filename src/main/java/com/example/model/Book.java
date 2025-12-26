@@ -27,49 +27,49 @@ import java.util.List;
 @Table(name = "books")
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false, length = 250)
-    private String title;
+	@Column(nullable = false, length = 250)
+	private String title;
 
-    @Column(nullable = false, length = 200)
-    private String author;
+	@Column(nullable = false, length = 200)
+	private String author;
 
-    @Column(length = 20)
-    private String isbn;
+	@Column(length = 20)
+	private String isbn;
 
-    @Column(length = 500)
-    private String description;
+	@Column(length = 500)
+	private String description;
 
-    private Integer publishedYear;
+	private Integer publishedYear;
 
-    private Double averageRating = 0.0D;
+	private Double averageRating = 0.0D;
 
-    private Integer ratingCount = 0;
+	private Integer ratingCount = 0;
 
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt;
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private List<Review> reviews = new ArrayList<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+	private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private List<Rating> ratings = new ArrayList<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+	private List<Rating> ratings = new ArrayList<>();
 
-    @PrePersist
-    void onCreate() {
-        Instant now = Instant.now();
-        createdAt = now;
-        updatedAt = now;
-    }
+	@PrePersist
+	void onCreate() {
+		Instant now = Instant.now();
+		createdAt = now;
+		updatedAt = now;
+	}
 
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
-    }
+	@PreUpdate
+	void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

@@ -29,43 +29,43 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false, unique = true, length = 150)
-    private String email;
+	@Column(nullable = false, unique = true, length = 150)
+	private String email;
 
-    @Column(nullable = false)
-    private String passwordHash;
+	@Column(nullable = false)
+	private String passwordHash;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String username;
+	@Column(nullable = false, unique = true, length = 100)
+	private String username;
 
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt;
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<UserBook> library = new ArrayList<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<UserBook> library = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Rating> ratings = new ArrayList<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Rating> ratings = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Review> reviews = new ArrayList<>();
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Review> reviews = new ArrayList<>();
 
-    @PrePersist
-    void onCreate() {
-        Instant now = Instant.now();
-        createdAt = now;
-        updatedAt = now;
-    }
+	@PrePersist
+	void onCreate() {
+		Instant now = Instant.now();
+		createdAt = now;
+		updatedAt = now;
+	}
 
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
-    }
+	@PreUpdate
+	void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

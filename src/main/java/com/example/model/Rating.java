@@ -29,40 +29,40 @@ import java.time.Instant;
 @Table(name = "ratings")
 public class Rating {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "book_id", nullable = false)
+	private Book book;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_book_id", nullable = false)
-    private UserBook userBook;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_book_id", nullable = false)
+	private UserBook userBook;
 
-    @Column(nullable = false)
-    private Integer value = 0;
+	@Column(nullable = false)
+	private Integer value = 0;
 
-    @Column(nullable = false, updatable = false)
-    private Instant createdAt;
+	@Column(nullable = false, updatable = false)
+	private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
-    @PrePersist
-    void onCreate() {
-        Instant now = Instant.now();
-        createdAt = now;
-        updatedAt = now;
-    }
+	@PrePersist
+	void onCreate() {
+		Instant now = Instant.now();
+		createdAt = now;
+		updatedAt = now;
+	}
 
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
-    }
+	@PreUpdate
+	void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }
