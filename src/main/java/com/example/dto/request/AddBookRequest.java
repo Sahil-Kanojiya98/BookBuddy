@@ -6,16 +6,18 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class AddBookRequest {
 
-    @NotNull
-    @Positive
-    private Long bookId;
+	@NotNull
+	@Positive
+	private Long bookId;
 
-    @NotNull
-    private ReadingStatus status;
+	@NotNull
+	private ReadingStatus status = ReadingStatus.TO_READ;
 }

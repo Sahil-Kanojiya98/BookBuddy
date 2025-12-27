@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginUserResponse {
 
-    private String token;
+	private String token;
 }

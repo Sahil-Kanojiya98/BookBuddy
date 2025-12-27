@@ -32,43 +32,43 @@ import java.time.Instant;
 @Table(name = "user_books")
 public class UserBook {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "book_id", nullable = false)
+	private Book book;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private ReadingStatus status;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 20)
+	private ReadingStatus status;
 
-    @OneToOne(mappedBy = "userBook")
-    private Rating rating;
+	@OneToOne(mappedBy = "userBook")
+	private Rating rating;
 
-    @OneToOne(mappedBy = "userBook")
-    private Review review;
+	@OneToOne(mappedBy = "userBook")
+	private Review review;
 
-    @Column(nullable = false, updatable = false)
-    private Instant addedAt;
+	@Column(nullable = false, updatable = false)
+	private Instant addedAt;
 
-    @Column(nullable = false)
-    private Instant updatedAt;
+	@Column(nullable = false)
+	private Instant updatedAt;
 
-    @PrePersist
-    void onCreate() {
-        Instant now = Instant.now();
-        addedAt = now;
-        updatedAt = now;
-    }
+	@PrePersist
+	void onCreate() {
+		Instant now = Instant.now();
+		addedAt = now;
+		updatedAt = now;
+	}
 
-    @PreUpdate
-    void onUpdate() {
-        updatedAt = Instant.now();
-    }
+	@PreUpdate
+	void onUpdate() {
+		updatedAt = Instant.now();
+	}
 }

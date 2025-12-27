@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class JwtPayload {
 
-    private Long userId;
-    private String username;
-    private String email;
-    private List<String> roles;
+	private Long userId;
+	private String username;
+	private String email;
+	private List<String> roles;
 
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-    }
+	public List<SimpleGrantedAuthority> getAuthorities() {
+		return roles.stream()
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
+	}
 }
