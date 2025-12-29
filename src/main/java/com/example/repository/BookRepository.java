@@ -37,7 +37,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 			    AND (:publishedYearFrom IS NULL OR b.publishedYear >= :publishedYearFrom)
 			""")
 	Page<BookResponse> searchBooks(
-			@Param("title") String title, @Param("author") String author, @Param("minRating") Integer minRating,
+			@Param("title") String title, @Param("author") String author, @Param("minRating") Float minRating,
 			@Param("publishedYearFrom") Integer publishedYearFrom,
 			PageRequest pageRequest);
 

@@ -20,7 +20,7 @@ public class BookSearchRequest {
 	private String author;
 
 	@Min(value = 1, message = "Minimum rating should be at least 1")
-	private Integer minRating;
+	private Float minRating;
 
 	@Min(value = 1000, message = "Published year from should be at least 1000")
 	private Integer publishedYearFrom;
