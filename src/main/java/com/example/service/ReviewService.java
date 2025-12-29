@@ -40,9 +40,8 @@ public class ReviewService {
 		validatorService.validatePositiveBookId(bookId);
 
 		Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userPrincipal.getId(), bookId);
-		if (optionalUserBook.isEmpty()) {
+		if (optionalUserBook.isEmpty())
 			throw new UserBookNotFoundException("User has not added this book to their collection");
-		}
 
 		UserBook userBook = optionalUserBook.get();
 		Review review = userBook.getReview();
@@ -67,9 +66,8 @@ public class ReviewService {
 		validatorService.validatePositiveBookId(bookId);
 		Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userPrincipal.getId(), bookId);
 
-		if (optionalUserBook.isEmpty()) {
+		if (optionalUserBook.isEmpty())
 			throw new UserBookNotFoundException("User has not added this book to their collection");
-		}
 
 		UserBook userBook = optionalUserBook.get();
 		Review review = userBook.getReview();

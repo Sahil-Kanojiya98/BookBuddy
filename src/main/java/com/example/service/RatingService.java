@@ -7,6 +7,7 @@ import com.example.exception.UserBookNotFoundException;
 import com.example.model.Book;
 import com.example.model.Rating;
 import com.example.model.UserBook;
+import com.example.repository.BookRepository;
 import com.example.repository.RatingRepository;
 import com.example.repository.UserBookRepository;
 import com.example.security.authentication.UserPrincipal;
@@ -26,6 +27,7 @@ public class RatingService {
 	private final ValidatorService validatorService;
 	private final UserBookRepository userBookRepository;
 	private final RatingRepository ratingRepository;
+	private final BookRepository bookRepository;
 
 	@Transactional
 	public RatingResponse addOrUpdateRating(UserPrincipal userPrincipal, Long bookId, RatingRequest ratingRequest) {
@@ -40,6 +42,7 @@ public class RatingService {
 		Rating rating = userBook.getRating();
 		if (rating != null) {
 			rating.setValue(ratingRequest.getValue());
+
 			ratingRepository.save(rating);
 			log.info("Updated rating. bookId {} userId {}", bookId, userPrincipal.getId());
 		} else {
@@ -54,6 +57,9 @@ public class RatingService {
 		}
 
 		Book book = userBook.getBook();
+		bookRepository.updateAverageRatingAndRatingCount(bookId);
+		log.info("Book rating updated for book ID {}", bookId);
+
 		return new RatingResponse(bookId, ratingRequest.getValue(), book.getAverageRating(), book.getRatingCount());
 	}
 
@@ -62,15 +68,15 @@ public class RatingService {
 		validatorService.validatePositiveBookId(bookId);
 		Optional<UserBook> optionalUserBook = userBookRepository.findByUserIdAndBookId(userPrincipal.getId(), bookId);
 
-		if (optionalUserBook.isEmpty()) {
+		if (optionalUserBook.isEmpty())
 			throw new UserBookNotFoundException("User has not added this book to their collection");
-		}
 
 		UserBook userBook = optionalUserBook.get();
 		Rating rating = userBook.getRating();
 		if (rating != null) {
 			ratingRepository.delete(rating);
-			log.info("Deleted rating. bookId {} userId {}", bookId, userPrincipal.getId());
+			bookRepository.updateAverageRatingAndRatingCount(bookId);
+			log.info("Deleted rating and book rating updated. bookId {} userId {}", bookId, userPrincipal.getId());
 		} else
 			throw new RatingNotFoundException(String.format("Rating not found. bookId: %d", bookId));
 	}

@@ -46,12 +46,13 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public UserBookResponse getMyLibraryBookById(UserPrincipal userPrincipal, Long bookId) {
 		Long userId = userPrincipal.getId();
+
 		Optional<UserBookResponse> optionalUserBookResponse = userBookRepository
 				.findUserBookResponseByUserIdAndBookId(userId, bookId);
-		if (optionalUserBookResponse.isEmpty()) {
+		if (optionalUserBookResponse.isEmpty())
 			throw new UserBookNotFoundException(
 					String.format("UserBook not found with userId %d bookId %d", userId, bookId));
-		}
+
 		return optionalUserBookResponse.get();
 	}
 
@@ -89,10 +90,9 @@ public class UserService {
 		Long userId = userPrincipal.getId();
 		Long bookId = addBookRequest.getBookId();
 
-		if (userBookRepository.findByUserIdAndBookId(userId, bookId).isPresent()) {
+		if (userBookRepository.findByUserIdAndBookId(userId, bookId).isPresent())
 			throw new UserBookAlreadyExistsException(
 					String.format("Book with id %d is already in user's library", bookId));
-		}
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException(String.format("User not found with id %d", userId)));
