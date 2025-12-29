@@ -29,6 +29,7 @@ INSERT INTO user_books (user_id, book_id, status, added_at, updated_at)
 VALUES
 -- user1
 (1, 1, 'READING', NOW(), NOW()),
+(1, 2, 'TO_READ', NOW(), NOW()),
 (1, 3, 'TO_READ', NOW(), NOW()),
 (1, 5, 'FINISHED', NOW(), NOW()),
 (1, 7, 'READING', NOW(), NOW()),
@@ -43,17 +44,15 @@ INSERT INTO ratings (user_id, book_id, user_book_id, value, created_at, updated_
 VALUES
 -- user1
 (1, 1, 1, 5, NOW(), NOW()),
-(1, 3, 2, 4, NOW(), NOW()),
+(1, 2, 2, 4, NOW(), NOW()),
+(1, 3, 3, 4, NOW(), NOW()),
 -- user2
-(2, 2, 5, 5, NOW(), NOW()),
-(2, 4, 6, 4, NOW(), NOW());
+(2, 2, 6, 5, NOW(), NOW()),
+(2, 4, 7, 4, NOW(), NOW());
 
 -- Update average_rating and rating_count for books 1, 2, 3, 4
 UPDATE books b
-SET
-    rating_count = COALESCE(r.r_count, 0),
-    average_rating = COALESCE(r.r_avg, 0)
-FROM (
+LEFT JOIN (
     SELECT
         book_id,
         COUNT(*) AS r_count,
@@ -61,15 +60,18 @@ FROM (
     FROM ratings
     WHERE book_id IN (1, 2, 3, 4)
     GROUP BY book_id
-) r
-WHERE b.id = r.book_id;
+) r ON b.id = r.book_id
+SET
+    b.rating_count = COALESCE(r.r_count, 0),
+    b.average_rating = COALESCE(r.r_avg, 0)
+WHERE b.id IN (1, 2, 3, 4);
 
 -- Reviews
 INSERT INTO reviews (user_id, book_id, user_book_id, content, created_at, updated_at)
 VALUES
 -- user1
 (1, 1, 1, 'Loved the adventure and world-building!', NOW(), NOW()),
-(1, 3, 2, 'Classic romance, really enjoyed it.', NOW(), NOW()),
+(1, 3, 3, 'Classic romance, really enjoyed it.', NOW(), NOW()),
 -- user2
-(2, 2, 5, 'Very thought-provoking dystopian story.', NOW(), NOW()),
-(2, 4, 6, 'A powerful message about justice.', NOW(), NOW());
+(2, 2, 6, 'Very thought-provoking dystopian story.', NOW(), NOW()),
+(2, 4, 7, 'A powerful message about justice.', NOW(), NOW());
