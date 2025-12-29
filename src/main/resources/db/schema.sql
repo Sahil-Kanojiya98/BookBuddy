@@ -1,6 +1,7 @@
 -- =============================
--- SCHEMA FOR BookBuddyAppDB WITH INDEXES
+-- SCHEMA FOR BookBuddyAppDB
 -- =============================
+
 
 -- =============================
 -- DROP ALL TABLES IF EXISTS
@@ -15,6 +16,9 @@ DROP TABLE IF EXISTS users;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
+-- =============================
+-- TABLES WITH ALL CONSTRAINTS AND INDEXES
+-- =============================
 
 -- USERS
 CREATE TABLE users (
@@ -45,7 +49,7 @@ CREATE TABLE books (
     INDEX idx_books_isbn (isbn)
 );
 
--- USER_BOOKS (Library)
+-- USER_BOOKS
 CREATE TABLE user_books (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
