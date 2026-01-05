@@ -1,10 +1,12 @@
 package com.example.controller;
 
+import com.example.config.SwaggerConfig;
 import com.example.dto.request.RatingRequest;
 import com.example.dto.response.ApiResponse;
 import com.example.dto.response.RatingResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.RatingService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/books")
+@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEME_NAME)
 public class RatingController {
 
 	private final RatingService ratingService;

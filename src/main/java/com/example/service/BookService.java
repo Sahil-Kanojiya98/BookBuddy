@@ -29,10 +29,11 @@ public class BookService {
 	@Cacheable(value = "books", key = "#id")
 	public BookResponse getBooksById(Long id) {
 		validatorService.validatePositiveBookId(id);
+
 		Optional<BookResponse> optionalBookResponse = bookRepository.findBookResponseById(id);
-		if (optionalBookResponse.isEmpty()) {
+		if (optionalBookResponse.isEmpty())
 			throw new BookNotFoundException(String.format("Book not found. id: %d", id));
-		}
+
 		return optionalBookResponse.get();
 	}
 

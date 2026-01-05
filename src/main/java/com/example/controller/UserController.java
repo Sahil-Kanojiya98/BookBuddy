@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.config.SwaggerConfig;
 import com.example.dto.request.AddBookRequest;
 import com.example.dto.request.BookSearchRequest;
 import com.example.dto.request.UpdateBookStatusRequest;
@@ -9,6 +10,7 @@ import com.example.dto.response.UserBookResponse;
 import com.example.dto.response.UserResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/users")
+@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEME_NAME)
 public class UserController {
 
 	private final UserService userService;

@@ -8,8 +8,8 @@ public class RateLimitConstant {
 	public static final String PUBLIC_API_PATH_REGX = "/api/v1/public/**"; // Exclude public paths
 
 	// Rate limit thresholds
-	public static final int LOGIN_RATE_LIMIT = 5; // 5 requests per second for login
-	public static final int SEARCH_RATE_LIMIT = 50; // 50 requests per second for search
+	public static final int LOGIN_RATE_LIMIT = 1; // 1 requests per second for login
+	public static final int SEARCH_RATE_LIMIT = 3; // 3 requests per second for search
 
 	// User ID request attribute key
 	public static final String USER_ID_ATTRIBUTE = "userId";

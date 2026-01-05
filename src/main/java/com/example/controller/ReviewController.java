@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.config.SwaggerConfig;
 import com.example.dto.request.ReviewRequest;
 import com.example.dto.request.ReviewSearchRequest;
 import com.example.dto.response.ApiResponse;
@@ -8,6 +9,7 @@ import com.example.dto.response.PaginatedResponse;
 import com.example.dto.response.ReviewResponse;
 import com.example.security.authentication.UserPrincipal;
 import com.example.service.ReviewService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
+@SecurityRequirement(name = SwaggerConfig.SECURITY_SCHEME_NAME)
 public class ReviewController {
 
 	private final ReviewService reviewService;

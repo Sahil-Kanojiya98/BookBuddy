@@ -14,6 +14,12 @@ import java.util.Optional;
 @Repository
 public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 
+	@Query("""
+			   SELECT ub
+			   FROM UserBook ub
+			   WHERE ub.user.id = :userId
+			     AND ub.book.id = :bookId
+			""")
 	Optional<UserBook> findByUserIdAndBookId(Long userId, Long bookId);
 
 	@Query("""
@@ -68,7 +74,7 @@ public interface UserBookRepository extends JpaRepository<UserBook, Long> {
 			@Param("userId") Long userId,
 			@Param("title") String title,
 			@Param("author") String author,
-			@Param("minRating") Integer minRating,
+			@Param("minRating") Float minRating,
 			@Param("publishedYearFrom") Integer publishedYearFrom,
 			Pageable pageable);
 }

@@ -44,7 +44,7 @@ public class RateLimiterService {
 		// @formatter:off
 		Bandwidth bandwidth = Bandwidth.builder()
                 .capacity(limit)
-                .refillGreedy(limit, Duration.ofMinutes(1))
+                .refillGreedy(limit, Duration.ofSeconds(1))
                 .build();
 
 		return Bucket.builder()

@@ -35,15 +35,13 @@ public class AuthService {
 
 	@Transactional
 	public void registerUser(RegisterUserRequest registerUserRequest) {
-		if (userRepository.existsByEmail(registerUserRequest.getEmail())) {
+		if (userRepository.existsByEmail(registerUserRequest.getEmail()))
 			throw new EmailAlreadyExistsException(
 					String.format("Email already exists. email: %s", registerUserRequest.getEmail()));
-		}
 
-		if (userRepository.existsByUsername(registerUserRequest.getUsername())) {
+		if (userRepository.existsByUsername(registerUserRequest.getUsername()))
 			throw new UsernameAlreadyExistsException(
 					String.format("Username already exists. username: %s", registerUserRequest.getUsername()));
-		}
 
 		User user = new User();
 		user.setEmail(registerUserRequest.getEmail());
@@ -74,9 +72,8 @@ public class AuthService {
 		authenticationManager.authenticate(authenticationToken);
 
 		Optional<User> optionalUser = userRepository.findByUsername(username);
-		if (optionalUser.isEmpty()) {
+		if (optionalUser.isEmpty())
 			throw new UserBookNotFoundException("User not found.");
-		}
 
 		User user = optionalUser.get();
 		String token = jwtTokenService.generateToken(user.getId(), user.getUsername(), user.getEmail(),
