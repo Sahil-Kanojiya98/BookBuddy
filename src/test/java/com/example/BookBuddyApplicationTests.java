@@ -8,8 +8,8 @@ class BookBuddyApplicationTests {
 
 	@Test
 	void contextLoads() {
-//		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(5);
-//		System.out.println("bCryptPasswordEncoder.encode(\"password\") = " +
-//				bCryptPasswordEncoder.encode("password"));
+		// BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(5);
+		// System.out.println("bCryptPasswordEncoder.encode(\"password\") = " +
+		// bCryptPasswordEncoder.encode("password"));
 	}
 }
